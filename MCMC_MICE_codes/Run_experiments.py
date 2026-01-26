@@ -79,10 +79,10 @@ if __name__ == "__main__":
     # Enhanced example usage with visualization
     
     # Load your data
-    #data_with_time = pd.read_csv('physionet_5000patients.csv')
-    #data_with_missing = pd.read_csv('physio_with_missing.csv')
-    #data_subset = pd.read_csv('physio_subdata.csv')
-    data = pd.read_csv("AirQualityUCI.csv", sep=';', decimal=',', parse_dates=['Date'])
+    data_with_time = pd.read_csv('physionet_5000patients.csv')
+    data_with_missing = pd.read_csv('physio_with_missing.csv')
+    data_subset = pd.read_csv('physio_subdata.csv')
+    '''data = pd.read_csv("AirQualityUCI.csv", sep=';', decimal=',', parse_dates=['Date'])
 
     # Fix the time format (replace '.' with ':' so time is valid)
     data['Time'] = data['Time'].str.replace('.', ':', regex=False)
@@ -103,19 +103,19 @@ if __name__ == "__main__":
     data_with_missing = pd.read_csv('Data_with_missing_AirQuality.csv')
     data_with_missing['Date_Time'] = pd.to_datetime(data_with_missing['Date_Time'])
     data_with_time['Date_Time'] = pd.to_datetime(data_with_time['Date_Time'])
-    data_subset['Date_Time'] = pd.to_datetime(data_subset['Date_Time'])
+    data_subset['Date_Time'] = pd.to_datetime(data_subset['Date_Time'])'''
     # Run the enhanced experiment with visualization
     summary_results, all_results = enhanced_run_experiment(
         complete_data=data_subset,
         data_with_time=data_with_time,
         missing_data=data_with_missing,
-        time_col='Date_Time',
-        n_runs=1,
+        time_col='Time',
+        n_runs=30,
         n_imputations=5,
         max_iter=5,
-        visualize_runs=[1], # Create detailed plots for these runs
+        visualize_runs=[1,30], # Create detailed plots for these runs
         save_plots=True,
-        output_dir='./experiment_plots'
+        output_dir='./experiment_plots_RWM_BRITS'
     )
     
     print("\n🎯 Enhanced 30×5 experiment with visualization finished!")
