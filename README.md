@@ -35,10 +35,10 @@ The repository contents four main folders that organise the projects's codebase:
    * BRITS.py: BRITS baseline implementation using pypots.
    * packages.py: Lists all the packages utilised in this study.
   
-3. **AirQuality_Plots**
+3. **Plots_AirQuality_Data**
      Contains all figures generated from experiments on the AirQuality dataset.
      
-5. **PhysioNet_Plots**
+5. **Plots_PhysioNet_Data**
      Contains all figures generated from experiments on the PhysioNet dataset.
 
 6. **Requirements**
