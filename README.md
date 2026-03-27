@@ -16,11 +16,11 @@ The repository contents four main folders that organise the projects's codebase:
 1. **Datasets**
    Contains the datasets used in the experiments:
    * **AirQualityUCI.csv:** Original unprocessed AirQuality environmental dataset with hourly measurements.
-   De Vito et al(2008)[Pollution monitoring scenario](https://www.sciencedirect.com/science/article/pii/S0925400507007691)
+   De Vito et al. (2008). [Pollution monitoring scenario](https://www.sciencedirect.com/science/article/pii/S0925400507007691)
    * **Data_subset_AirQuality.csv:** Complete AirQuality dataset after removal of original missing values.
    * **Data_with_missing_AirQuality.csv:** AirQuality dataset with artifically masked missing values for controlled evaluation.
    * **physionet_5000patients.csv:** Transformed PhysioNet dataset (tabular structure), filtered to remove rows with more than 60% missingness
-     Silva et al(2012)[The Physionet/computing in cardiology challenge](https://ieeexplore.ieee.org/abstract/document/6420376)
+     Silva et al. (2012). [The Physionet/computing in cardiology challenge](https://ieeexplore.ieee.org/abstract/document/6420376)
    * **physio_subdata.csv:** Complete PhysioNet dataset after removal of all missing values.
    * **physio_with_missing.cvs:** PhysioNet dataset with artifically masked missing values.
   
