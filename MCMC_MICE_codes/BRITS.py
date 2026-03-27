@@ -16,12 +16,12 @@ def run_brits_separately(
 ) -> Dict:
 
     print("=" * 80)
-    print("🚀 BRITS SEPARATE EXPERIMENT (GPU) - WITH SCALING")
+    print("BRITS SEPARATE EXPERIMENT (GPU) - WITH SCALING")
     print("=" * 80)
 
     if device == "cuda" and not torch.cuda.is_available():
         device = "cpu"
-    print(f"🖥️ Device: {device}")
+    print(f"Device: {device}")
 
     missing_mask = missing_data.isnull() & ~complete_data.isnull()
     cols_with_missing = [c for c in numeric_cols if missing_mask[c].sum() > 0]
@@ -91,15 +91,15 @@ def run_brits_separately(
     # Generate windows
     X_train, starts = make_windows(missing_data)
     
-    # ✅ FIX #3: Check BEFORE any processing
+    # Check BEFORE any processing
     if X_train.shape[0] == 0:
         raise RuntimeError("No valid BRITS windows generated")
     
-    # ✅ FIX #3: Renamed to avoid shadowing parameter
+    # Renamed to avoid shadowing parameter
     n_windows, n_steps_actual, n_features = X_train.shape
-    print(f"📊 Generated {n_windows} windows of shape ({n_steps_actual}, {n_features})")
+    print(f"Generated {n_windows} windows of shape ({n_steps_actual}, {n_features})")
 
-    # ✅ FIX #2: NaN-safe scaling
+    # NaN-safe scaling
     X_flat = X_train.reshape(-1, n_features)
     
     # Compute mean and std ignoring NaN
@@ -111,33 +111,33 @@ def run_brits_separately(
     X_scaled_flat = (X_flat - scaler_mean) / scaler_scale
     X_train_scaled = X_scaled_flat.reshape(n_windows, n_steps_actual, n_features)
     
-    print(f"✅ Data scaled using NaN-safe method")
+    print(f"Data scaled using NaN-safe method")
     print(f"   Feature means: {scaler_mean[:3]}... (first 3)")
     print(f"   Feature stds:  {scaler_scale[:3]}... (first 3)")
 
     # ---------------- runs ----------------
     for run in range(n_runs):
-        print(f"\n🔁 BRITS Run {run + 1}/{n_runs}")
+        print(f"\nBRITS Run {run + 1}/{n_runs}")
         torch.manual_seed(1000 + run)
         np.random.seed(1000 + run)
 
         start = time_module.time()
 
         brits = BRITS(
-            n_steps=n_steps_actual,  # ✅ Use actual window size
+            n_steps=n_steps_actual,  # Use actual window size
             n_features=n_features,
             rnn_hidden_size=rnn_hidden_size,
             epochs=epochs,
             device=device
         )
         
-        # ✅ FIX #1: Correct variable name (lowercase 's')
+        # Correct variable name (lowercase 's')
         brits.fit({"X": X_train_scaled})
 
         # Impute in scaled space
         imputed_windows_scaled = brits.impute({"X": X_train_scaled})
         
-        # ✅ FIX #2: Inverse transform using stored parameters
+        # Inverse transform using stored parameters
         imputed_flat_scaled = imputed_windows_scaled.reshape(-1, n_features)
         imputed_flat_original = imputed_flat_scaled * scaler_scale + scaler_mean
         imputed_windows = imputed_flat_original.reshape(n_windows, n_steps_actual, n_features)
@@ -176,7 +176,7 @@ def run_brits_separately(
 
         elapsed = time_module.time() - start
         timing.append(elapsed)
-        print(f"⏱️ Run time: {elapsed:.2f}s")
+        print(f"Run time: {elapsed:.2f}s")
 
         del brits
         torch.cuda.empty_cache()
@@ -203,8 +203,8 @@ def run_brits_separately(
     with open(output_path, "wb") as f:
         pickle.dump(output, f)
 
-    print(f"\n💾 Results saved to: {output_path}")
-    print(f"⏱️ Total time: {sum(timing):.2f}s ({sum(timing)/60:.1f} minutes)")
+    print(f"\n Results saved to: {output_path}")
+    print(f" Total time: {sum(timing):.2f}s ({sum(timing)/60:.1f} minutes)")
 
     return output
 
@@ -230,5 +230,5 @@ if __name__ == "__main__":
     )
 
     print(f"\n{'='*100}")
-    print("🎉 BRITS EXPERIMENT COMPLETED!")
+    print("BRITS EXPERIMENT COMPLETED!")
     print('='*100)

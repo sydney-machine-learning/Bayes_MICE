@@ -35,14 +35,14 @@ def enhanced_run_experiment(complete_data, data_with_time, missing_data,
     print("Comparing: MICE vs MCMC_MICE_V1 vs MCMC_MICE_V2 vs BRITS")
     print("="*100)
     print(f"Configuration:")
-    print(f"  • Experimental runs: {n_runs}")
-    print(f"  • Imputations per run: {n_imputations}")
-    print(f"  • MICE iterations: {max_iter}")
-    print(f"  • MCMC samples: 12,500")
-    print(f"  • MCMC burn-in: 4,800")
-    print(f"  • Time column: {time_col}")
-    print(f"  • Visualization runs: {visualize_runs}")
-    print(f"  • Save plots: {save_plots}")
+    print(f"Experimental runs: {n_runs}")
+    print(f"Imputations per run: {n_imputations}")
+    print(f"MICE iterations: {max_iter}")
+    print(f"MCMC samples: 12,500")
+    print(f"MCMC burn-in: 4,800")
+    print(f"Time column: {time_col}")
+    print(f"Visualization runs: {visualize_runs}")
+    print(f"Save plots: {save_plots}")
     if save_plots:
         print(f"  • Output directory: {output_dir}")
     print("="*100)
@@ -63,15 +63,15 @@ def enhanced_run_experiment(complete_data, data_with_time, missing_data,
     )
     
     print(f"\n{'='*100}")
-    print("🎉 ENHANCED EXPERIMENT COMPLETED!")
+    print("ENHANCED EXPERIMENT COMPLETED!")
     print('='*100)
-    print(f"✅ Completed {n_runs} runs with {n_imputations} imputations each")
-    print(f"📊 Generated visualizations for runs: {visualize_runs}")
+    print(f"Completed {n_runs} runs with {n_imputations} imputations each")
+    print(f"Generated visualizations for runs: {visualize_runs}")
     if save_plots:
-        print(f"💾 All plots saved to: {output_dir}")
-        print(f"📈 Summary plots: experiment_summary_[METRIC].png")
-        print(f"🔍 Detailed plots: imputation_comparison_run[X]_[COLUMN].png")
-        print(f"📋 Accuracy plots: prediction_accuracy_run[X]_[COLUMN].png")
+        print(f"All plots saved to: {output_dir}")
+        print(f"Summary plots: experiment_summary_[METRIC].png")
+        print(f"Detailed plots: imputation_comparison_run[X]_[COLUMN].png")
+        print(f"Accuracy plots: prediction_accuracy_run[X]_[COLUMN].png")
     
     return summary_results, all_results, timing_results
 
@@ -118,5 +118,5 @@ if __name__ == "__main__":
         output_dir='./experiment_plots_RWM_BRITS'
     )
     
-    print("\n🎯 Enhanced 30×5 experiment with visualization finished!")
-    print("📊 Check the experiment_plots directory for all visualizations!")
+    print("\n Enhanced 30×5 experiment with visualization finished!")
+    print(" Check the experiment_plots directory for all visualizations!")

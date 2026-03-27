@@ -56,9 +56,9 @@ class MCMCMICEVisualizer:
             handlelength=2.0, handleheight=1.0, markerscale=1.0,
             loc='upper right'
         )
-        # ==========================================
+        # ========================
         # Plot 2: Original vs MICE
-        # ==========================================
+        # ========================
         ax2 = axes[0, 1]
         ax2.plot(x_axis, complete_slice, color=COLORS["Original"], linewidth=2.5, alpha=0.95, label="Original")
         
@@ -86,7 +86,7 @@ class MCMCMICEVisualizer:
                 loc='upper center', bbox_to_anchor=(0.5, -0.18),
                 ncol=2)
         
-        # -------------------- Plot 3: Original vs MCMC methods --------------------
+        # ---------- Plot 3: Original vs MCMC methods -----------
         ax3 = axes[1, 0]
         ax3.plot(x_axis, complete_slice, color=COLORS["Original"],
                  linewidth=2.5, alpha=0.95, label="Original")
@@ -114,9 +114,9 @@ class MCMCMICEVisualizer:
                 ncol=3
             )
 
-        # ==========================================
+        # ==========================
         # Plot 4: Original vs BRITS
-        # ==========================================
+        # ==========================
         ax4 = axes[1, 1]
         ax4.plot(x_axis, complete_slice, color=COLORS["Original"], linewidth=2.5, alpha=0.95, label="Original")
         
@@ -227,9 +227,9 @@ class MCMCMICEVisualizer:
         # X-axis: missing value positions
         x_positions = np.arange(len(missing_indices))
         
-        # ========================================
+        # ====================================
         # Plot each method with SHARED y-axis
-        # ========================================
+        # ====================================
         for idx, (method_name, errors) in enumerate(errors_dict.items()):
             ax = axes[idx]
             color = COLORS.get(method_name, "#333333")
@@ -246,12 +246,12 @@ class MCMCMICEVisualizer:
             rmse = np.sqrt(np.mean(errors**2))
             
             # Add statistics text
-            stats_text = f'MAE: {mae:.3f}\nRMSE: {rmse:.3f}'
+            stats_text = f'MAE: {mae:.3f}\n RMSE: {rmse:.3f}'
             ax.text(0.02, 0.98, stats_text, transform=ax.transAxes, 
                     fontsize=11, verticalalignment='top',
                     bbox=dict(boxstyle='round', facecolor='white', alpha=0.8))
             
-            # ✅ SET SHARED Y-AXIS LIMITS FOR ALL SUBPLOTS
+            # SET SHARED Y-AXIS LIMITS FOR ALL SUBPLOTS
             ax.set_ylim(ylim_min, ylim_max)
             
             ax.set_xlabel('Missing Value Index', fontsize=18)
@@ -268,7 +268,7 @@ class MCMCMICEVisualizer:
         
         if fname is not None:
             plt.savefig(fname, dpi=300, bbox_inches='tight')
-            print(f"📊 Plot saved to: {fname}")
+            print(f"Plot saved to: {fname}")
             plt.close()
         else:
             plt.show()
@@ -305,7 +305,7 @@ class MCMCMICEVisualizer:
                 ax1.scatter(true_values, predictions, alpha=0.6, s=18, 
                            color=colors[i % len(colors)], label=method)
         
-        # Add perfect prediction line
+        # Add prediction line
         lo = np.min([true_values.min()] + [predictions_dict[m].min() for m in method_names if m in predictions_dict])
         hi = np.max([true_values.max()] + [predictions_dict[m].max() for m in method_names if m in predictions_dict])
         pad = 0.03 * (hi - lo)
@@ -405,6 +405,7 @@ class MCMCMICEVisualizer:
         ax4.set_ylabel('Absolute Error', fontsize=18)
         ax4.tick_params(axis='both', labelsize=16)
         plt.setp(ax4.get_xticklabels(), rotation=45, ha='right')
+
         #ax4.set_title('Error Distribution Comparison')
         ax4.grid(True, alpha=0.3)
         
@@ -448,7 +449,7 @@ class MCMCMICEVisualizer:
         method_order = ['MICE', 'MCMC_MICE_V1', 'MCMC_MICE_V2', 'BRITS']
         methods = [m for m in method_order if m in available_methods]
         
-        print(f"📊 Plotting {len(methods)} methods: {', '.join(methods)}")
+        print(f"Plotting {len(methods)} methods: {', '.join(methods)}")
         
         fig, axes = plt.subplots(1, 2, figsize=(16, 6))
         
@@ -466,7 +467,7 @@ class MCMCMICEVisualizer:
             handlelength=2.0, handleheight=1.0, markerscale=1.0
         )
         
-        # ✅ FIX 3: Color palette for up to 4 methods
+        # FIX 3: Color palette for up to 4 methods
         colors = ['C0', 'C1', 'C2', 'C3', 'C4']
 
         for i, method in enumerate(methods):
@@ -494,7 +495,7 @@ class MCMCMICEVisualizer:
         
         ax1.set_xlabel('Variables', fontsize=20)
         ax1.set_ylabel(f'{metric}', fontsize=20)
-        ax1.set_xticks(x_pos + width * (len(methods) - 1) / 2)  # ✅ Center the ticks
+        ax1.set_xticks(x_pos + width * (len(methods) - 1) / 2)  # Center the ticks
         ax1.set_xticklabels(columns, rotation=45, ha='right')
         ax1.tick_params(axis='both', labelsize=16)
         ax1.grid(True, alpha=0.3, axis='y')
@@ -509,7 +510,7 @@ class MCMCMICEVisualizer:
             method_data = []
             method_labels = []
             
-            for method in methods:  # ✅ Use dynamic methods list
+            for method in methods:  # Use dynamic methods list
                 metric_key = f'{method}_{metric.lower()}'
                 if metric_key in all_results[col]:
                     data = [x for x in all_results[col][metric_key] if x != np.inf]
@@ -520,7 +521,7 @@ class MCMCMICEVisualizer:
             if method_data:
                 box_plot = ax2.boxplot(method_data, labels=method_labels, patch_artist=True)
                 
-                # ✅ FIX 4: Color boxes based on actual number of methods
+                # FIX 4: Color boxes based on actual number of methods
                 for patch, color in zip(box_plot['boxes'], colors[:len(method_data)]):
                     patch.set_facecolor(color)
                     patch.set_alpha(0.7)
@@ -539,7 +540,7 @@ class MCMCMICEVisualizer:
         ax2.grid(True, alpha=0.3, axis='y')    
         
         fig.tight_layout()
-        fig.subplots_adjust(hspace=0.40, bottom=0.20)  # ✅ More space for legend
+        fig.subplots_adjust(hspace=0.40, bottom=0.20)  # More space for legend
         
         if fname is not None:
             plt.savefig(fname, dpi=300, bbox_inches='tight')
@@ -613,7 +614,7 @@ class MCMCMICEVisualizer:
             parts.append(sampler)
             filepath = os.path.join(output_dir, "_".join(parts) + ".png")
             plt.savefig(filepath, dpi=300, bbox_inches='tight')
-            print(f"✅ Saved: {filepath}")
+            print(f"Saved: {filepath}")
 
         plt.show()
 
@@ -656,7 +657,6 @@ class MCMCMICEVisualizer:
         ax.set_ylabel(param_name, fontsize=18)
         ax.tick_params(axis='both', labelsize=16)
         #plt.title(f"Trace with 95% CI for {param_name}")
-        # legend (capture handle for saving)
         leg = ax.legend(**legend_kwargs)
 
         # layout
@@ -675,7 +675,7 @@ class MCMCMICEVisualizer:
         fig.savefig(filepath, dpi=300, bbox_inches='tight', bbox_extra_artists=(leg,))
         plt.show()
         plt.close(fig)
-        print(f"📈 Saved CI trace for {param_name}: {output_dir}")
+        print(f"Saved CI trace for {param_name}: {output_dir}")
 
     def plot_prediction_with_ci(self, y_true, train_sims, title=None, save_path=None, run_number=None):
         """
@@ -711,12 +711,12 @@ class MCMCMICEVisualizer:
         )
         fig.tight_layout()
         fig.subplots_adjust(bottom=0.18) 
-        if save_path:                                  # <-- guard
+        if save_path:                             
             fig.savefig(save_path, dpi=300, bbox_inches='tight', bbox_extra_artists=(leg,))
         else:
             plt.show()
         plt.close(fig)
-        print(f"📈 Saved plot to {save_path}")
+        print(f"Saved plot to {save_path}")
        
 
 def visualize_single_run_results(complete_data, missing_data, imputed_datasets_dict, 

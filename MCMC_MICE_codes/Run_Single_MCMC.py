@@ -24,7 +24,7 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
         
         # Step 1: Initialize missing values (same as before)
         if verbose:
-            print(f"        Step 1: Initializing with {mcmc_mice.initialization}...")
+            print(f"Step 1: Initializing with {mcmc_mice.initialization}...")
         
         if mcmc_mice.initialization == 'placeholder':
             if not mcmc_mice._ts_analysis_computed:
@@ -34,7 +34,7 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
         
         # Step 2: Run MCMC-MICE iterations (same as before)
         if verbose:
-            print(f"        Step 2: Running {max_iter} MCMC-MICE iterations...")
+            print(f"Step 2: Running {max_iter} MCMC-MICE iterations...")
         
         missing_mask = missing_data.isnull()
         missing_cols = [col for col in missing_data.columns if col != mcmc_mice.time_col and missing_mask[col].any()]
@@ -45,7 +45,7 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
         # MICE-style iterations
         for iteration in range(max_iter):
             if verbose and iteration == 0:
-                print(f"          MCMC-MICE iteration {iteration + 1}/{max_iter}...")
+                print(f"MCMC-MICE iteration {iteration + 1}/{max_iter}...")
             
             vars_to_impute = missing_cols.copy()
             if iteration > 0:
@@ -94,7 +94,7 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
                     validation_passed = True
                     # First: Validate model quality using observed data split
                     if len(y_obs) > 20:
-                        print(f"        📊 Validating model quality for {current_var}...")
+                        print(f"Validating model quality for {current_var}...")
                         
                         split_idx = int(0.8 * len(y_obs))
                         X_train, X_val = X_obs[:split_idx], X_obs[split_idx:]
@@ -142,7 +142,7 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
 
                             if 'train_sim' in val_pred:
                                 # Unscale each row in train_sim
-                                print(f"🔁 Generating train_sim CI plot for {current_var}")
+                                print(f"Generating train_sim CI plot for {current_var}")
                                 train_sim_unscaled = np.array([
                                     mcmc_mice._unscale_predictions(row, current_var)
                                     for row in val_pred['train_sim']
@@ -159,7 +159,7 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
 
                             if 'test_sim' in val_pred:
                                 # Unscale each row in test_sim
-                                print(f"🔁 Generating test_sim CI plot for {current_var}")
+                                print(f"Generating test_sim CI plot for {current_var}")
                                 test_sim_unscaled = np.array([
                                     mcmc_mice._unscale_predictions(row, current_var)
                                     for row in val_pred['test_sim']
@@ -177,20 +177,20 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
                             
                             if val_rmse > validation_threshold:
                                 if verbose:
-                                    print(f"        ❌ Validation FAILED: RMSE {val_rmse:.4f} > {validation_threshold:.4f}")
+                                    print(f"Validation FAILED: RMSE {val_rmse:.4f} > {validation_threshold:.4f}")
                                 validation_passed = False
                             else:
                                 if verbose:
-                                    print(f"        ✅ Validation PASSED: RMSE {val_rmse:.4f}")
+                                    print(f"Validation PASSED: RMSE {val_rmse:.4f}")
                         else:
                             if verbose:
-                                print(f"        ❌ Validation FAILED: No predictions generated")
+                                print(f"Validation FAILED: No predictions generated")
                             validation_passed = False
                     
                     # Skip this variable if validation failed
                     if not validation_passed:
                         if verbose:
-                            print(f"        ⏭️  Skipping {current_var} due to validation failure")
+                            print(f"Skipping {current_var} due to validation failure")
                         continue    
                     
                     # Scale data
@@ -219,7 +219,7 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
                     # Check if MCMC succeeded
                     if results_df is None or pred_dict is None:
                         if verbose:
-                            print(f"❌ {current_var}: MCMC failed (poor convergence)")
+                            print(f"{current_var}: MCMC failed (poor convergence)")
                         continue
                     
                     # Store MCMC results for target variable
@@ -240,7 +240,7 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
                         if verbose:
                             conv_status = convergence_diag['convergence_status']
                             rhat_max = convergence_diag.get('rhat_max', 'N/A')
-                            print(f"        ✅ Good convergence for {current_var} (R-hat: {rhat_max:.4f})")
+                            print(f"Good convergence for {current_var} (R-hat: {rhat_max:.4f})")
                     
                     # Update imputed data for next iteration
                     if 'test_pred' in pred_dict and pred_dict['test_pred'] is not None:
@@ -253,23 +253,23 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
 
                 except Exception as e:
                     if verbose:
-                        print(f"        Error in MCMC for {current_var}: {str(e)}")
+                        print(f"Error in MCMC for {current_var}: {str(e)}")
                     continue
 
         if final_mcmc_results is None:
             if verbose:
-                print(f"        No MCMC results available for {target_col}")
+                print(f" No MCMC results available for {target_col}")
             return np.inf, np.inf, np.inf, np.inf, np.inf
 
         if verbose:
-            print(f"        Step 3: Generating {n_posterior_samples} imputations from fresh chain...")
+            print(f"Step 3: Generating {n_posterior_samples} imputations from fresh chain...")
 
         pred_dict = final_mcmc_results['pred_dict']
         matching_indices = final_mcmc_results['matching_indices']
 
         if 'test_pred' not in pred_dict or pred_dict['test_pred'] is None:
             if verbose:
-                print(f"          No predictions available from fresh chain")
+                print(f"No predictions available from fresh chain")
             return np.inf, np.inf, np.inf, np.inf, np.inf
 
         posterior_predictions = pred_dict['test_pred']
@@ -287,12 +287,12 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
             unscaled_pred = mcmc_mice._unscale_predictions(sampled_predictions, target_col)
 
             if verbose and imputation_idx == 0:
-                print(f"        📊 Prediction shapes:")
-                print(f"           True values: {len(true_values)}")
-                print(f"           Predictions: {len(unscaled_pred)}")
+                print(f" Prediction shapes:")
+                print(f" True values: {len(true_values)}")
+                print(f" Predictions: {len(unscaled_pred)}")
 
             if len(matching_indices) != len(unscaled_pred):
-                print(f"❌ Mismatch: true={len(matching_indices)} vs pred={len(unscaled_pred)}")
+                print(f"Mismatch: true={len(matching_indices)} vs pred={len(unscaled_pred)}")
                 return np.inf, np.inf, np.inf, np.inf, np.inf
 
             true_values_aligned = subdata.loc[matching_indices, target_col].values
@@ -316,8 +316,8 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
             avg_nrmse = np.mean(nrmse_list)
 
             if verbose:
-                print(f"✅ Separated-phase MCMC completed successfully")
-                print(f"📈 Final metrics - RMSE: {avg_rmse:.4f}")
+                print(f"Separated-phase MCMC completed successfully")
+                print(f"Final metrics - RMSE: {avg_rmse:.4f}")
 
             return imputed_datasets, avg_rmse, avg_mae, avg_mre, avg_nrmse
         else:
@@ -325,7 +325,7 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
 
     except Exception as e:
         if verbose:
-            print(f"❌ Separated-phase MCMC failed: {str(e)}")
+            print(f"Separated-phase MCMC failed: {str(e)}")
             import traceback
             traceback.print_exc()
         return np.inf, np.inf, np.inf, np.inf, np.inf

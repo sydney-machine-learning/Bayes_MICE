@@ -61,7 +61,7 @@ class SelectiveDataPreparation:
         print(f"  Using LAGS ONLY strategy with {max_lags} lags ({lag_type})")
         
         if include_future_y_lags:
-            print(f"  ⚠️  WARNING: Using future y lags - only appropriate for IMPUTATION, not forecasting!")
+            print(f"WARNING: Using future y lags - only appropriate for IMPUTATION, not forecasting!")
         
         # ==========================================
         # Time feature extraction
@@ -107,11 +107,11 @@ class SelectiveDataPreparation:
                     
                     time_features = ['hour', 'minutes']
                     
-                    print(f"   ✅ Extracted time features successfully")
-                    print(f"   Sample hours: {data['hour'].head().tolist()}")
-                    print(f"   Sample minutes: {data['minutes'].head().tolist()}")
+                    print(f" Extracted time features successfully")
+                    print(f" Sample hours: {data['hour'].head().tolist()}")
+                    print(f" Sample minutes: {data['minutes'].head().tolist()}")
                 except Exception as e:
-                    print(f"   ❌ Time feature extraction failed: {e}")
+                    print(f" Time feature extraction failed: {e}")
                     data['hour'] = 12
                     data['minutes'] = 0
                     time_features = ['hour', 'minutes']
@@ -136,7 +136,7 @@ class SelectiveDataPreparation:
             end_idx = len(data)
         
         if start_idx >= end_idx:
-            print(f"  ❌ ERROR: Not enough data for {max_lags} lags (need at least {2*max_lags + 1} rows)")
+            print(f" ERROR: Not enough data for {max_lags} lags (need at least {2*max_lags + 1} rows)")
             return np.array([]), np.array([]), np.array([])
         
         for t in range(start_idx, end_idx):
@@ -230,15 +230,15 @@ class SimpleMCMCWithPlaceholder:
     def analyze_time_series_patterns(self, data_with_time, verbose=True):
         """Debug version of time series analysis"""
         if verbose:
-            print("🔍 DEBUG: Analyzing time series patterns...")
-            print(f"   Data shape: {data_with_time.shape}")
-            print(f"   Time column: {self.time_col}")
-            print(f"   Time column exists: {self.time_col in data_with_time.columns}")
+            print(f"DEBUG: Analyzing time series patterns...")
+            print(f"Data shape: {data_with_time.shape}")
+            print(f"Time column: {self.time_col}")
+            print(f"Time column exists: {self.time_col in data_with_time.columns}")
         
         try:
             # Check if time_series_pattern function exists
             if 'time_series_pattern' not in globals():
-                print("❌ time_series_pattern function not found!")
+                print("time_series_pattern function not found!")
                 self.ts_analysis = {}
                 self._ts_analysis_computed = True
                 return self.ts_analysis
@@ -247,18 +247,18 @@ class SimpleMCMCWithPlaceholder:
             self._ts_analysis_computed = True
             
             if verbose:
-                print("✅ Time series analysis completed:")
+                print("Time series analysis completed:")
                 for col, analysis in self.ts_analysis.items():
                     if col != self.time_col:
-                        trend_str = "✓" if analysis.get('has_trend', False) else "✗"
-                        seasonal_str = "✓" if analysis.get('has_seasonality', False) else "✗"
+                        trend_str = "good" if analysis.get('has_trend', False) else "bad"
+                        seasonal_str = "good" if analysis.get('has_seasonality', False) else "bad"
                         period = analysis.get('seasonal_period', 'None')
                         strength = analysis.get('seasonal_strength', 0)
                         print(f"     {col}: Trend {trend_str}, Seasonality {seasonal_str} "
                             f"(period: {period}, strength: {strength:.3f})")
         
         except Exception as e:
-            print(f"❌ Time series analysis failed: {type(e).__name__}: {str(e)}")
+            print(f"Time series analysis failed: {type(e).__name__}: {str(e)}")
             self.ts_analysis = {}
             self._ts_analysis_computed = True
         
@@ -267,56 +267,56 @@ class SimpleMCMCWithPlaceholder:
         # Also add debug wrapper around place_holder function:
     def debug_place_holder(self, data, ts_analysis=None):
         """Debug wrapper for place_holder function"""
-        print(f"  🎯 place_holder called:")
-        print(f"     Data shape: {data.shape}")
-        print(f"     TS analysis: {ts_analysis is not None}")
-        print(f"     Input nulls: {data.isnull().sum().sum()}")
+        print(f" place_holder called:")
+        print(f" Data shape: {data.shape}")
+        print(f" TS analysis: {ts_analysis is not None}")
+        print(f" Input nulls: {data.isnull().sum().sum()}")
         
         try:
             result = place_holder(data, ts_analysis=ts_analysis)
-            print(f"     Output nulls: {result.isnull().sum().sum()}")
-            print(f"     Data changed: {not data.equals(result)}")
+            print(f" Output nulls: {result.isnull().sum().sum()}")
+            print(f" Data changed: {not data.equals(result)}")
             return result
         except Exception as e:
-            print(f"     ERROR: {type(e).__name__}: {str(e)}")
+            print(f" ERROR: {type(e).__name__}: {str(e)}")
             raise
 
     def _initialize_missing_values(self, data, ts_analysis=None):
         """
         Initialize missing values using different strategies with comprehensive debugging
         """
-        print(f"\n🔍 DEBUG INITIALIZATION:")
-        print(f"   Method: '{self.initialization}'")
-        print(f"   Data shape: {data.shape}")
-        print(f"   Missing values: {data.isnull().sum().sum()}")
-        print(f"   TS analysis available: {self.ts_analysis is not None}")
+        print(f"\n DEBUG INITIALIZATION:")
+        print(f" Method: '{self.initialization}'")
+        print(f" Data shape: {data.shape}")
+        print(f" Missing values: {data.isnull().sum().sum()}")
+        print(f" TS analysis available: {self.ts_analysis is not None}")
         
         if self.ts_analysis:
-            print(f"   TS analysis keys: {list(self.ts_analysis.keys())}")
+            print(f" TS analysis keys: {list(self.ts_analysis.keys())}")
             for col, analysis in self.ts_analysis.items():
                 if col != self.time_col:
                     print(f"   {col}: trend={analysis.get('has_trend', False)}, "
                         f"seasonal={analysis.get('has_seasonality', False)}")
         
         if self.initialization == 'mean':
-            print("📊 Executing MEAN initialization...")
+            print("Executing MEAN initialization...")
             result = self._mean_initialization(data)
-            print(f"✅ Mean initialization completed - remaining nulls: {result.isnull().sum().sum()}")
+            print(f"Mean initialization completed - remaining nulls: {result.isnull().sum().sum()}")
             return result
             
         elif self.initialization == 'placeholder':
-            print("🔄 Executing PLACEHOLDER initialization...")
-            print(f"   Calling place_holder with ts_analysis: {self.ts_analysis is not None}")
+            print(f"Executing PLACEHOLDER initialization...")
+            print(f"Calling place_holder with ts_analysis: {self.ts_analysis is not None}")
             
             try:
                 # Call place_holder and capture result
                 result = self.debug_place_holder(data, ts_analysis=self.ts_analysis)
                 remaining_nulls = result.isnull().sum().sum()
-                print(f"✅ Placeholder completed successfully - remaining nulls: {remaining_nulls}")
+                print(f"Placeholder completed successfully - remaining nulls: {remaining_nulls}")
                 
                 # Check if results are identical to input (would indicate no processing)
                 changes_made = not data.equals(result)
-                print(f"   Changes made to data: {changes_made}")
+                print(f"Changes made to data: {changes_made}")
                 
                 if changes_made:
                     # Show which columns were modified
@@ -325,18 +325,18 @@ class SimpleMCMCWithPlaceholder:
                             orig_nulls = data[col].isnull().sum()
                             new_nulls = result[col].isnull().sum()
                             if orig_nulls != new_nulls:
-                                print(f"   📈 {col}: {orig_nulls} → {new_nulls} nulls")
+                                print(f" {col}: {orig_nulls} → {new_nulls} nulls")
                 
                 return result
                 
             except ImportError as e:
-                print(f"❌ Import error in placeholder: {e}")
-                print("🔧 Falling back to mean initialization...")
+                print(f"Import error in placeholder: {e}")
+                print("Falling back to mean initialization...")
                 return self._mean_initialization(data)
                 
             except Exception as e:
-                print(f"❌ Placeholder initialization FAILED: {type(e).__name__}: {str(e)}")
-                print("🔧 Falling back to mean initialization...")
+                print(f"Placeholder initialization FAILED: {type(e).__name__}: {str(e)}")
+                print("Falling back to mean initialization...")
                 return self._mean_initialization(data)
         
         else:
@@ -403,7 +403,7 @@ class SimpleMCMCWithPlaceholder:
             true_clean, pred_clean = SimpleMCMCWithPlaceholder.validate_inputs(true_values, predicted_values)
             return np.sqrt(np.mean((pred_clean - true_clean)**2))
         except (ValueError, ZeroDivisionError) as e:
-            print(f"⚠️  RMSE calculation failed: {e}")
+            print(f"RMSE calculation failed: {e}")
             return np.inf
     
     @staticmethod
@@ -415,11 +415,11 @@ class SimpleMCMCWithPlaceholder:
             #range_val = np.max(true_clean) - np.min(true_clean)
             denom = np.std(true_clean)
             if denom < 1e-8:
-                print("⚠️  True values have no range, returning MAE")
+                print("True values have no range, returning MAE")
                 return mae
             return mae/denom
         except (ValueError, ZeroDivisionError) as e:
-            print(f"⚠️  MAE calculation failed: {e}")
+            print(f"MAE calculation failed: {e}")
             return np.inf
     
     @staticmethod
@@ -461,12 +461,12 @@ class SimpleMCMCWithPlaceholder:
             if method == 'range':
                 denom = np.max(true_clean) - np.min(true_clean)
                 if denom < min_std:
-                    print(f"⚠️  True values have no range (constant), using RMSE: {rmse:.6f}")
+                    print(f"True values have no range (constant), using RMSE: {rmse:.6f}")
                     return rmse  # Return unnormalized RMSE for constant values
             elif method == 'std':
                 denom = np.std(true_clean)
                 if denom < min_std:
-                    print(f"⚠️  True values have zero variance, using RMSE: {rmse:.6f}")
+                    print(f"True values have zero variance, using RMSE: {rmse:.6f}")
                     return rmse  # Return unnormalized RMSE for constant values
             else:
                 raise ValueError("method must be 'range' or 'std'")
@@ -474,7 +474,7 @@ class SimpleMCMCWithPlaceholder:
             return rmse / denom
             
         except (ValueError, ZeroDivisionError) as e:
-            print(f"⚠️  NRMSE calculation failed: {e}")
+            print(f"NRMSE calculation failed: {e}")
             return np.inf
     
     
@@ -490,7 +490,7 @@ class SimpleMCMCWithPlaceholder:
         # Log any infinite metrics
         infinite_metrics = [k for k, v in metrics.items() if np.isinf(v)]
         if infinite_metrics:
-            print(f"⚠️  Infinite metrics detected: {infinite_metrics}")
+            print(f"Infinite metrics detected: {infinite_metrics}")
         
         return metrics
     def run_mcmc_with_separated_phases(mcmc_mice, X_obs_scaled, y_obs_scaled, X_miss_scaled, y_miss, 
@@ -499,7 +499,7 @@ class SimpleMCMCWithPlaceholder:
         """
         UPDATED: Three-phase approach - dual chains for diagnostics + fresh chain for predictions
         PHASE 1: Run dual chains for convergence diagnostics only
-        PHASE 2: Evaluate diagnostics (but don't fail on poor convergence)  
+        PHASE 2: Evaluate diagnostics and summarize convergence status
         PHASE 3: Run fresh single chain SPECIFICALLY for predictions
         """
         def save_summary_as_image(summary_df, filepath):
@@ -517,18 +517,18 @@ class SimpleMCMCWithPlaceholder:
             table.scale(1.2, 1.2)
             plt.savefig(filepath, bbox_inches='tight', dpi=300)
             plt.close()
-            print(f"📷 Saved convergence summary image: {filepath}")
+            print(f"Saved convergence summary image: {filepath}")
 
         if verbose:
-            print(f"    🔬 Two-phase MCMC for {target_name}...")
-            print(f"    Phase 1: Convergence check (dual-chain)")
-            print(f"    Phase 2: Diagnostics evaluation") 
+            print(f"Two-phase MCMC for {target_name}...")
+            print(f"Phase 1: Convergence check (dual-chain)")
+            print(f"Phase 2: Diagnostics evaluation") 
         
-        # ========================================
+        # =====================================
         # PHASE 1: CONVERGENCE DIAGNOSTICS ONLY
-        # ========================================
+        # =====================================
         if verbose:
-            print(f"    📊 Phase 1: Running convergence diagnostics...")
+            print(f"Phase 1: Running convergence diagnostics...")
         
         # Set seeds for reproducibility
         if mcmc_seed is not None:
@@ -556,11 +556,11 @@ class SimpleMCMCWithPlaceholder:
             use_adaptive=True,
             sampler_type="RWM"
         )
-        results_chain1, predict_chain1 = mcmc_chain1.sampler()  # DISCARD predictions
+        results_chain1, predict_chain1 = mcmc_chain1.sampler() 
         
         # Show convergence plots if requested
         if show_convergence_plots:
-            print(f"    📊 Showing convergence plots for {target_name} (Chain 1)...")
+            print(f"Showing convergence plots for {target_name} (Chain 1)...")
             visualizer.convergence_plots(mcmc_chain1, chain_label="chain1", target_col=target_name,
                     run_number=1)
         for param in ['tau','rmse', 'w0', 'w1']:
@@ -584,10 +584,10 @@ class SimpleMCMCWithPlaceholder:
             use_adaptive=True,
             sampler_type="RWM"
         )
-        results_chain2, predict_chain2 = mcmc_chain2.sampler()  # DISCARD predictions
+        results_chain2, predict_chain2 = mcmc_chain2.sampler() 
         
         if show_convergence_plots:
-            print(f"    📊 Showing convergence plots for {target_name} (Chain 2)...")
+            print(f"Showing convergence plots for {target_name} (Chain 2)...")
             visualizer.convergence_plots(mcmc_chain2, chain_label="chain2", target_col=target_name,
                     run_number=1)
         for param in ['tau','rmse', 'w0', 'w1']:
@@ -598,9 +598,9 @@ class SimpleMCMCWithPlaceholder:
                     run_number=1
                 )
 
-        # ========================================
-        # PHASE 2: DIAGNOSTICS EVALUATION (NON-BLOCKING)
-        # ========================================
+        # ===============================
+        # PHASE 2: DIAGNOSTICS EVALUATION
+        # ===============================
         try:
             # Convert to ArviZ format
             res_dict_chain1 = results_chain1.to_dict(orient='list')
@@ -627,16 +627,16 @@ class SimpleMCMCWithPlaceholder:
             }
             
             if verbose:
-                print(f"    📊 Convergence Results:")
-                print(f"       Max R-hat: {convergence_summary['rhat_max']:.4f}")
-                print(f"       Status: {convergence_summary['convergence_status']}")
+                print(f"Convergence Results:")
+                print(f"Max R-hat: {convergence_summary['rhat_max']:.4f}")
+                print(f"Status: {convergence_summary['convergence_status']}")
 
                 # Show detailed R-hat for each parameter
                 for param, rhat in convergence_summary['rhat_values'].items():
-                    status = "✅" if rhat < 1.05 else "⚠️" if rhat < 1.1 else "❌"
-                    print(f"        {param}: {rhat:.4f} {status}")
+                    status = "GOOD" if rhat < 1.05 else "MODERATE" if rhat < 1.1 else "POOR"
+                    print(f" {param}: {rhat:.4f} {status}")
 
-            # ✅ Save convergence summary as image
+            # Save convergence summary as image
             if output_dir:
                 os.makedirs(output_dir, exist_ok=True)
                 fname_parts = ["convergence_summary"]
@@ -649,7 +649,7 @@ class SimpleMCMCWithPlaceholder:
                 
         except Exception as e:
             if verbose:
-                print(f"    ❌ Convergence diagnostics failed: {e}")
+                print(f"Convergence diagnostics failed: {e}")
             convergence_summary = {
                 'rhat_values': np.inf,
                 'convergence_status': 'ERROR',
@@ -657,9 +657,9 @@ class SimpleMCMCWithPlaceholder:
             }
         if verbose:         
             if convergence_summary['convergence_status'] == 'POOR':
-                print(f"    ⚠️  Poor convergence detected, but continuing with predictions anyway")
+                print(f"Poor convergence detected, but continuing with predictions anyway")
             else:
-                print(f"    ✅ Convergence: {convergence_summary['convergence_status']}")
+                print(f"Convergence: {convergence_summary['convergence_status']}")
 
-        # ✅ Return diagnostic chain results and predictions
+        # Return diagnostic chain results and predictions
         return results_chain1, predict_chain1, convergence_summary

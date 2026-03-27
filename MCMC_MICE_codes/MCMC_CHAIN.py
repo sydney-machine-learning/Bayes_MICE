@@ -83,14 +83,14 @@ class MCMC_CHAIN:
         
         # Weakly informative but stable prior
         self.sigma_squared = 5
-        self.nu_1 = 1 #2.1     # Finite mean and variance
-        self.nu_2 = 0.5  #1.0     # Weak but stable scale
+        self.nu_1 = 1 
+        self.nu_2 = 0.5  
 
          # Adjust step sizes based on sampler type
         if self.sampler_type == "MALA":
             # MALA typically needs smaller step sizes due to gradient guidance
-            self.step_theta = 0.01  # Smaller than RWM
-            self.step_eta = 0.005   # Smaller than RWM
+            self.step_theta = 0.01  
+            self.step_eta = 0.005   
         else:  # RWM
             self.step_theta = 0.02
             self.step_eta = 0.01
@@ -550,9 +550,9 @@ class MCMC_CHAIN:
                 print(f"RWM target range: {target_range[0]}-{target_range[1]}")
             
             if target_range[0] <= final_rate <= target_range[1]:
-                print(f"✓ Acceptance rate is in good range for {self.sampler_type}")
+                print(f"Acceptance rate is in good range for {self.sampler_type}")
             else:
-                print(f"⚠ Acceptance rate may be suboptimal for {self.sampler_type}")
+                print(f"Acceptance rate may be suboptimal for {self.sampler_type}")
         # Parameter convergence check (simplified)
         if self.pos_theta is not None:
             # Check if parameters have converged by comparing first and second half
@@ -573,9 +573,9 @@ class MCMC_CHAIN:
                             convergence_issues += 1
                 
                 if convergence_issues == 0:
-                    print("✓ Parameters appear to have converged")
+                    print("Parameters appear to have converged")
                 else:
-                    print(f"⚠ {convergence_issues}/{self.theta_size} parameters may not have converged")
+                    print(f"{convergence_issues}/{self.theta_size} parameters may not have converged")
         
         # Log-likelihood stability
         if self.log_likelihood_trace is not None:
@@ -583,9 +583,9 @@ class MCMC_CHAIN:
             if len(post_burnin_ll) > 10:
                 ll_trend = np.polyfit(range(len(post_burnin_ll)), post_burnin_ll, 1)[0]
                 if abs(ll_trend) < 0.001:
-                    print("✓ Log-likelihood is stable")
+                    print("Log-likelihood is stable")
                 else:
-                    print(f"⚠ Log-likelihood shows trend: {ll_trend:.6f}")
+                    print(f"Log-likelihood shows trend: {ll_trend:.6f}")
         
         # Step size adaptation summary
         if self.step_sizes['theta'] and self.step_sizes['eta']:

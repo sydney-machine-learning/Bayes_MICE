@@ -291,7 +291,7 @@ def plot_imputation_comparison_focused(complete_data, missing_data, imputed_data
         "Original": "black",
         "MICE (Time-Lagged)": "#E69F00",
         "KNN (k=5)": "#56B4E9",
-        "Linear Interpolation": "#009E73",
+        "Linear Interpolation":"#009E73",
         "Cubic Interpolation": "#F0E442",
         "Mean": "#CC79A7",
         "Median": "#D55E00",
@@ -336,9 +336,9 @@ def plot_imputation_comparison_focused(complete_data, missing_data, imputed_data
     else:
         window_missing = []
     
-    # ==========================================
+    # ==============================
     # Plot 1: Original Complete Data
-    # ==========================================
+    # ==============================
     ax = axes[0]
     ax.plot(x_axis, complete_slice, color=COLORS["Original"], 
             linewidth=1.5, alpha=0.8, label="Original")
@@ -355,9 +355,9 @@ def plot_imputation_comparison_focused(complete_data, missing_data, imputed_data
     ax.legend(fontsize=12, frameon=True, loc='upper right')
     ax.set_title('Original Complete Data', fontsize=14, fontweight='bold', pad=10)
     
-    # ==========================================
+    # ================
     # Plot each method
-    # ==========================================
+    # ================
     for idx, (method_name, imputed_data) in enumerate(imputed_datasets_dict.items(), 1):
         ax = axes[idx]
         
@@ -409,7 +409,7 @@ def plot_imputation_comparison_focused(complete_data, missing_data, imputed_data
     
     if fname is not None:
         plt.savefig(fname, dpi=300, bbox_inches='tight')
-        print(f"📊 Plot saved to: {fname}")
+        print(f"Plot saved to: {fname}")
         plt.close()
     else:
         plt.show()
@@ -525,7 +525,7 @@ def plot_imputation_comparison_grid(complete_data, missing_data, imputed_dataset
     
     if fname is not None:
         plt.savefig(fname, dpi=300, bbox_inches='tight')
-        print(f"📊 Plot saved to: {fname}")
+        print(f"Plot saved to: {fname}")
         plt.close()
     else:
         plt.show()
@@ -589,7 +589,7 @@ def plot_error_comparison(complete_data, imputed_datasets_dict, target_col,
     
     if fname is not None:
         plt.savefig(fname, dpi=300, bbox_inches='tight')
-        print(f"📊 Plot saved to: {fname}")
+        print(f"Plot saved to: {fname}")
         plt.close()
     else:
         plt.show()
@@ -658,8 +658,8 @@ def evaluate_all_methods(series_with_missing, complete_data, verbose=True):
         ('Cubic Interpolation', lambda s: interpolation_imputation(s, method='cubic')),
         ('Mean', mean_imputation),
         ('Median', median_imputation),
-        #('LOCF', locf_imputation),
-        #('Seasonal Decomposition', lambda s: seasonal_decomposition_imputation(s, period=12))
+        ('LOCF', locf_imputation),
+        ('Seasonal Decomposition', lambda s: seasonal_decomposition_imputation(s, period=12))
     ]
     
     for idx, (name, impute_func) in enumerate(methods_list, 2):
@@ -731,15 +731,15 @@ def print_interpretation(results_df):
     best_method = results_df.iloc[0]['Method']
     best_rmse = results_df.iloc[0]['RMSE']
     
-    print(f"\n🏆 Best performing method: {best_method}")
-    print(f"   RMSE: {best_rmse}")
+    print(f"\n Best performing method: {best_method}")
+    print(f"RMSE: {best_rmse}")
     
     print("\nMetrics explanation:")
-    print("  - RMSE: Root Mean Square Error (lower is better)")
-    print("  - MAE: Mean Absolute Error (lower is better)")
-    print("  - NMAE: Normalized MAE (relative to std of true values)")
-    print("  - NRMSE: Normalized RMSE (relative to std of true values)")
-    print("  - MRE: Mean Relative Error (percentage error)")
+    print("RMSE: Root Mean Square Error (lower is better)")
+    print("MAE: Mean Absolute Error (lower is better)")
+    print("NMAE: Normalized MAE (relative to std of true values)")
+    print("NRMSE: Normalized RMSE (relative to std of true values)")
+    print("MRE: Mean Relative Error (percentage error)")
 
 
 # ==================== MAIN EXECUTION ====================
@@ -775,7 +775,7 @@ if __name__ == "__main__":
     
     # Save results
     results_df.to_csv('imputation_results.csv', index=False)
-    print(f"\n💾 Results saved to: imputation_results.csv")
+    print(f"\n Results saved to: imputation_results.csv")
     
     # ==================== GENERATE PLOTS ====================
     print("\n" + "="*80)
@@ -790,7 +790,7 @@ if __name__ == "__main__":
     imputed_datasets_clean = {k: v for k, v in imputed_datasets.items() if v is not None}
     
     # 1. Focused comparison plot (full series)
-    print("\n📊 Creating focused comparison plot (full series)...")
+    print("\n Creating focused comparison plot (full series)...")
     plot_imputation_comparison_focused(
         complete_data=series_complete,
         missing_data=series_masked,
@@ -802,7 +802,7 @@ if __name__ == "__main__":
     )
     
     # 2. Focused comparison plot (zoomed window)
-    print("\n📊 Creating focused comparison plot (zoomed window)...")
+    print("\n Creating focused comparison plot (zoomed window)...")
     # Find a window with missing values
     if len(missing_indices) > 0:
         # Center around first missing value
@@ -822,7 +822,7 @@ if __name__ == "__main__":
         )
     
     # 3. Grid comparison plot
-    print("\n📊 Creating grid comparison plot...")
+    print("\n Creating grid comparison plot...")
     plot_imputation_comparison_grid(
         complete_data=series_complete,
         missing_data=series_masked,
@@ -834,7 +834,7 @@ if __name__ == "__main__":
     )
     
     # 4. Error comparison plot (first 30 missing values for clarity)
-    print("\n📊 Creating error comparison plot...")
+    print("\n Creating error comparison plot...")
     n_errors_to_show = min(30, len(missing_indices))
     plot_error_comparison(
         complete_data=series_complete,
@@ -845,19 +845,19 @@ if __name__ == "__main__":
     )
     
     print("\n" + "="*80)
-    print("✅ All visualizations generated!")
+    print(" All visualizations generated!")
     print("="*80)
-    print("\nGenerated files:")
-    print("  - imputation_results.csv")
-    print("  - imputation_focused_full.png")
-    print("  - imputation_focused_zoom.png")
-    print("  - imputation_grid.png")
-    print("  - imputation_errors.png")
+    print("\n Generated files:")
+    print("imputation_results.csv")
+    print("imputation_focused_full.png")
+    print("imputation_focused_zoom.png")
+    print("imputation_grid.png")
+    print("imputation_errors.png")
     
     print("\n" + "="*80)
     print("COMPLETED!")
     print("="*80)
-    print(f"\n💾 Results saved to: imputation_results.csv")
+    print(f"\n Results saved to: imputation_results.csv")
     
     print("\n" + "="*80)
     print("COMPLETED!")
