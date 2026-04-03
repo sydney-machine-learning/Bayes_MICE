@@ -16,9 +16,11 @@ The repository contents four main folders that organise the projects's codebase:
 1. **Datasets**
    Contains the datasets used in the experiments:
    * **AirQualityUCI.csv:** Original unprocessed AirQuality environmental dataset with hourly measurements.
+   De Vito et al. (2008). [Pollution monitoring scenario](https://www.sciencedirect.com/science/article/pii/S0925400507007691)
    * **Data_subset_AirQuality.csv:** Complete AirQuality dataset after removal of original missing values.
    * **Data_with_missing_AirQuality.csv:** AirQuality dataset with artifically masked missing values for controlled evaluation.
-   * **physionet_5000patients.csv:** Transformed PhysioNet dataset (tabular structure), filtered to remove rows with more than 60% missingness
+   * **physionet_5000patients.csv:** Transformed PhysioNet dataset (tabular structure), filtered to remove rows with more than 60% missingness.
+   Silva et al. (2012). [The Physionet/computing in cardiology challenge](https://ieeexplore.ieee.org/abstract/document/6420376)
    * **physio_subdata.csv:** Complete PhysioNet dataset after removal of all missing values.
    * **physio_with_missing.cvs:** PhysioNet dataset with artifically masked missing values.
   
@@ -27,8 +29,8 @@ The repository contents four main folders that organise the projects's codebase:
    * placeholder.py: Initialises missing values for MICE (mean-based and time-aware variants).
    * PhysioData_Loader.py: Converts raw PhysioNet data into structured format, and applies mask missingness masks.
    * MCMC_CHAIN.py: Implements the MCMC samplers (RWM or MALA).
-   * SimpleMCMC.py: Constructs lagged predictors and runs parallel MCMC chains for convergence diagnostics
-   * Run_Single_MCMC.py: Executes MCMC within each MICE iteration and check convergences
+   * SimpleMCMC.py: Constructs lagged predictors and runs parallel MCMC chains for convergence diagnostics. Replace  sample_type ="RWM/MALA" with your choice of sampler.
+   * Run_Single_MCMC.py: Executes MCMC within each MICE iteration and check convergences. For preprocessing function replace      your choice of data ( data_type = "physionet or air")
    * Comparison_runs.py: Performs multiple imputation across 30 experimental runs for methods comparison.
    * Run_experiments.py: Manages the full experimental workflow.
    * Visualisation.py: Generates the all plots used in the study.
