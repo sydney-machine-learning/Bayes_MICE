@@ -29,7 +29,7 @@ The repository contents four main folders that organise the projects's codebase:
    * placeholder.py: Initialises missing values for MICE (mean-based and time-aware variants).
    * PhysioData_Loader.py: Converts raw PhysioNet data into structured format, and applies mask missingness masks.
    * MCMC_CHAIN.py: Implements the MCMC samplers (RWM or MALA).
-   * SimpleMCMC.py: Constructs lagged predictors and runs parallel MCMC chains for convergence diagnostics for RWM/MALA            depending on the sampler you want. Just replace sample_type ="RWM/MALA" with your choice of sampler.
+   * SimpleMCMC.py: Constructs lagged predictors and runs parallel MCMC chains for convergence diagnostics. Replace  sample_type ="RWM/MALA" with your choice of sampler.
    * Run_Single_MCMC.py: Executes MCMC within each MICE iteration and check convergences. For preprocessing function replace      your choice of data ( data_type = "physionet or air")
    * Comparison_runs.py: Performs multiple imputation across 30 experimental runs for methods comparison.
    * Run_experiments.py: Manages the full experimental workflow.
