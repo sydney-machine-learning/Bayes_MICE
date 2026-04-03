@@ -62,7 +62,8 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
                     # Prepare data
                     X, y, used_indices = mcmc_mice.data_prep.prepare_selective_data(
                         imputed_data, current_var, predictors, mcmc_mice.time_col, max_lags=2, data_type='physionet'
-                    )
+                    ) # To run the airquality data, replace data_type = physionet with air
+
                     
                     if len(X) == 0 or len(y) == 0:
                         continue
@@ -71,11 +72,6 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
                     used_indices_set = set(used_indices)
                     original_missing_set = set(missing_mask[current_var][missing_mask[current_var]].index)
                     matching_indices = sorted(original_missing_set.intersection(used_indices_set))
-                    
-                    #true_values = subdata.loc[matching_indices, target_col].values
-                    #print("Total missing (artificial):", len(original_missing_set))  # Or however you created it
-                    #print("Used in MCMC prediction:", len(matching_indices))
-                    #print("True values retrieved for comparison:", len(true_values))
                                     
                     aligned_missing_mask = np.array([idx in original_missing_set for idx in used_indices])
                     aligned_observed_mask = ~aligned_missing_mask

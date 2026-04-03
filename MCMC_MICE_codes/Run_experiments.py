@@ -74,42 +74,88 @@ def enhanced_run_experiment(complete_data, data_with_time, missing_data,
         print(f"Accuracy plots: prediction_accuracy_run[X]_[COLUMN].png")
     
     return summary_results, all_results, timing_results
+import pandas as pd
+import numpy as np
+
+
+def load_experiment_data(data_type: str):
+    """
+    Load dataset files for AirQuality or PhysioNet.
+
+    Parameters
+    ----------
+    data_type : str
+        Either "air" or "physionet".
+
+    Returns
+    -------
+    data_with_time : pd.DataFrame
+        Full dataset with time information.
+    data_with_missing : pd.DataFrame
+        Dataset containing missing values.
+    data_subset : pd.DataFrame
+        Subset/complete dataset for experiments.
+    time_col : str
+        Name of the time column to use in downstream functions.
+    """
+
+    data_type = data_type.lower().strip()
+
+    if data_type == "physionet":
+        data_with_time = pd.read_csv("physionet_5000patients.csv")
+        data_with_missing = pd.read_csv("physio_with_missing.csv")
+        data_subset = pd.read_csv("physio_subdata.csv")
+        time_col = "Time"
+
+    elif data_type == "air":
+        data = pd.read_csv("AirQualityUCI.csv", sep=";", decimal=",", parse_dates=["Date"])
+
+        # Fix time format
+        data["Time"] = data["Time"].astype(str).str.replace(".", ":", regex=False)
+
+        # Combine date and time
+        data['Date_Time'] = pd.to_datetime(data['Date'].astype(str) + ' ' + data['Time'], format='%d/%m/%Y %H:%M:%S')
+
+        # Drop original Date and Time columns
+        data.drop(columns=["Date", "Time"], inplace=True)
+
+      
+        # Select relevant features
+        selected_features = ['Date_Time', 'CO(GT)', 'PT08.S1(CO)', 'NMHC(GT)', 'C6H6(GT)', 'PT08.S2(NMHC)', 'T']
+        data = data[selected_features]
+
+        # Replace AirQuality missing code with NaN
+        data_with_time = data.replace(-200, np.nan)
+
+        # Load prepared files
+        data_subset = pd.read_csv("Data_subset_AirQuality.csv")
+        data_with_missing = pd.read_csv("Data_with_missing_AirQuality.csv")
+
+        # Ensure datetime columns are parsed properly
+        data_with_time["Date_Time"] = pd.to_datetime(data_with_time["Date_Time"], errors="coerce")
+        data_subset["Date_Time"] = pd.to_datetime(data_subset["Date_Time"], errors="coerce")
+        data_with_missing["Date_Time"] = pd.to_datetime(data_with_missing["Date_Time"], errors="coerce")
+
+        time_col = "Date_Time"
+
+    else:
+        raise ValueError("data_type must be either 'air' or 'physionet'")
+
+    return data_with_time, data_with_missing, data_subset, time_col
 
 if __name__ == "__main__":
     # Enhanced example usage with visualization
     
     # Load your data
-    data_with_time = pd.read_csv('physionet_5000patients.csv')
-    data_with_missing = pd.read_csv('physio_with_missing.csv')
-    data_subset = pd.read_csv('physio_subdata.csv')
-    '''data = pd.read_csv("AirQualityUCI.csv", sep=';', decimal=',', parse_dates=['Date'])
-
-    # Fix the time format (replace '.' with ':' so time is valid)
-    data['Time'] = data['Time'].str.replace('.', ':', regex=False)
-
-    # Combine date and time into one datetime column
-    data['Date_Time'] = pd.to_datetime(data['Date'].astype(str) + ' ' + data['Time'], format='%d/%m/%Y %H:%M:%S')
-
-    # Drop original Date and Time columns
-    data.drop(columns=['Date', 'Time'], inplace=True)
-
-    # Select relevant features
-    selected_features = ['Date_Time', 'CO(GT)', 'PT08.S1(CO)', 'NMHC(GT)', 'C6H6(GT)', 'PT08.S2(NMHC)', 'T']
-    data = data[selected_features]
-
-    # Replace true missing values (-200) with NaN
-    data_with_time = data.replace(-200, np.nan)
-    data_subset = pd.read_csv('Data_subset_AirQuality.csv')
-    data_with_missing = pd.read_csv('Data_with_missing_AirQuality.csv')
-    data_with_missing['Date_Time'] = pd.to_datetime(data_with_missing['Date_Time'])
-    data_with_time['Date_Time'] = pd.to_datetime(data_with_time['Date_Time'])
-    data_subset['Date_Time'] = pd.to_datetime(data_subset['Date_Time'])'''
+    # To run airquality data, replace data_type = physionet with air
+    data_with_time, data_with_missing, data_subset, time_col = load_experiment_data(data_type='physionet')
+    
     # Run the enhanced experiment with visualization
     summary_results, all_results = enhanced_run_experiment(
         complete_data=data_subset,
         data_with_time=data_with_time,
         missing_data=data_with_missing,
-        time_col='Time',
+        time_col=time_col,
         n_runs=30,
         n_imputations=5,
         max_iter=5,
