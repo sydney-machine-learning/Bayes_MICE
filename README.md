@@ -1,4 +1,4 @@
-# Bayes_MICE
+# tBayes_MICE
 This repository contains the implementation and experimental results for Bayes-MICE, a Bayesian extension of Multiple Imputation by Chained Equation (MICE) designed for uncertainty-aware imputation of time-series data. The method integrated Markov Chain Monte Cralo (MCMC) samply within the fully Condition Specification (FCS) framework and is evaluated on both environmental and clinical datasets. 
 
 # Overview
@@ -11,7 +11,7 @@ Two variants are implemented:
 Both variants support **Random Walk Metropolis (RWM)** and **Metropolis-Adjusted Langevin Algorithm (MALA)** samplers, with theoretically motivated optimal scaling to improve convergence and mixing.
 
 # Repository structure and Contents
-The repository contents four main folders that organise the projects's codebase: **Datasets**, **MCMC_MICE_codes**, **AirQuality_Plots** and **PhysioNet_Plots**.
+The repository contents four main folders that organise the projects's codebase: **Datasets**, **tBayes_MICE_codes**, **AirQuality_Plots** and **PhysioNet_Plots**.
 
 1. **Datasets**
    Contains the datasets used in the experiments:
@@ -29,8 +29,8 @@ The repository contents four main folders that organise the projects's codebase:
    * placeholder.py: Initialises missing values for MICE (mean-based and time-aware variants).
    * PhysioData_Loader.py: Converts raw PhysioNet data into structured format, and applies mask missingness masks.
    * MCMC_CHAIN.py: Implements the MCMC samplers (RWM or MALA).
-   * SimpleMCMC.py: Constructs lagged predictors and runs parallel MCMC chains for convergence diagnostics. Replace  sample_type ="RWM/MALA" with your choice of sampler.
-   * Run_Single_MCMC.py: Executes MCMC within each MICE iteration and check convergences. For preprocessing function replace      your choice of data ( data_type = "physionet or air")
+   * SimpleMCMC.py: Constructs lagged predictors and runs parallel MCMC chains for convergence diagnostics. Replace  sample_type ="RWM/MALA" with your choice of sampler in the MCMC_CHAIN function.
+   * Run_Single_MCMC.py: Executes MCMC within each MICE iteration and check convergences. For preprocessing function replace your choice of data ( data_type = "physionet" or "air") in the    prepare_selective_data function.
    * Comparison_runs.py: Performs multiple imputation across 30 experimental runs for methods comparison.
    * Run_experiments.py: Manages the full experimental workflow.
    * Visualisation.py: Generates the all plots used in the study.

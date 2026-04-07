@@ -554,7 +554,7 @@ class SimpleMCMCWithPlaceholder:
             variable_name=target_name,
             verbose=False,
             use_adaptive=True,
-            sampler_type="RWM"
+            sampler_type="RWM" #/"MALA"
         )
         results_chain1, predict_chain1 = mcmc_chain1.sampler() 
         
@@ -582,7 +582,7 @@ class SimpleMCMCWithPlaceholder:
             variable_name=target_name,
             verbose=False,
             use_adaptive=True,
-            sampler_type="RWM"
+            sampler_type="RWM" #/"MALA"
         )
         results_chain2, predict_chain2 = mcmc_chain2.sampler() 
         

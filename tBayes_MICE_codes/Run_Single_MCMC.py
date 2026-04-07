@@ -62,7 +62,7 @@ def run_single_mcmc(mcmc_mice, data_with_time, missing_data, subdata, target_col
                     # Prepare data
                     X, y, used_indices = mcmc_mice.data_prep.prepare_selective_data(
                         imputed_data, current_var, predictors, mcmc_mice.time_col, max_lags=2, data_type='physionet'
-                    ) # To run the airquality data, replace data_type = physionet with air
+                    ) # To run the airquality data, replace data_type ="physionet" with "air"
 
                     
                     if len(X) == 0 or len(y) == 0:
