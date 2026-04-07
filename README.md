@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 # tBayes_MICE
 This repository contains the implementation and experimental results for Bayes-MICE, a Bayesian extension of Multiple Imputation by Chained Equation (MICE) designed for uncertainty-aware imputation of time-series data. The method integrated Markov Chain Monte Cralo (MCMC) samply within the fully Condition Specification (FCS) framework and is evaluated on both environmental and clinical datasets. 
-=======
-# Bayes_MICE
-This repository contains the implementation and experimental results for Bayes-MICE, a Bayesian extension of Multiple Imputation by Chained Equation (MICE) designed for uncertainty-aware imputation of time-series data. The method integrated Markov Chain Monte Carlo (MCMC) samply within the fully Condition Specification (FCS) framework and is evaluated on both environmental and clinical datasets. 
->>>>>>> 5e7a3af970044f35ac39e55c3324eccbf9da5ec5
 
 # Overview
 Missing data are pervasive in real-world time-series applications, particularly in environmental monitoring and healthcare, where reliable uncertainty quantification is essential. Bayes-MICE extends classical MICE by replacing deterministic regression updates with Bayesian regression models whose parameters and imputations are jointly sampled via MCMC.
@@ -29,7 +24,7 @@ The repository contents four main folders that organise the projects's codebase:
    * **physio_subdata.csv:** Complete PhysioNet dataset after removal of all missing values.
    * **physio_with_missing.cvs:** PhysioNet dataset with artifically masked missing values.
   
-2. **MCMC_MICE_codes**
+2. **tBayes_MICE_codes**
    Python scripts implementing the Bayes-MICE framework and experiment pipeline:
    * placeholder.py: Initialises missing values for MICE (mean-based and time-aware variants).
    * PhysioData_Loader.py: Converts raw PhysioNet data into structured format, and applies mask missingness masks.
