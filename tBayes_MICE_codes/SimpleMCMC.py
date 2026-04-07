@@ -216,7 +216,7 @@ class SimpleMCMCWithPlaceholder:
     """
     Simple MCMC-MICE using lags strategy + place_holder initialization + time_series_pattern
     """
-    def __init__(self, time_col='Date_Time', n_samples=12000, burn_in=None, initialization='mean'):
+    def __init__(self, time_col='Date_Time', n_samples=30000, burn_in=None, initialization='mean'):
         self.time_col = time_col
         self.n_samples = n_samples
         self.burn_in = max(4000, int(n_samples * 0.2))
