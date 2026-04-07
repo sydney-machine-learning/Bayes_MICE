@@ -24,7 +24,7 @@ The repository contents four main folders that organise the projects's codebase:
    * **physio_subdata.csv:** Complete PhysioNet dataset after removal of all missing values.
    * **physio_with_missing.cvs:** PhysioNet dataset with artifically masked missing values.
   
-2. **MCMC_MICE_codes**
+2. **tBayes_MICE_codes**
    Python scripts implementing the Bayes-MICE framework and experiment pipeline:
    * placeholder.py: Initialises missing values for MICE (mean-based and time-aware variants).
    * PhysioData_Loader.py: Converts raw PhysioNet data into structured format, and applies mask missingness masks.
